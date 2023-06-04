@@ -7,6 +7,8 @@ import { ok, notOk } from "./result.js";
  * @property {number} major
  * @property {number} minor
  * @property {number} patch
+ * @property {string[]} prerelease
+ * @property {string[]} build
  */
 
 /**
@@ -17,14 +19,14 @@ import { ok, notOk } from "./result.js";
  * @returns {Version}
  */
 export function bump(v, k) {
-	if (!(Object.prototype.hasOwnProperty.call(v, k))) {
+	if (!Object.prototype.hasOwnProperty.call(v, k)) {
 		return v;
 	}
 
 	// 1.2.1 === Patch ===> 1.2.2
 	// 1.2.1 === Minor ===> 1.3.0
 	// 1.2.1 === Major ===> 2.0.0
-	let {major, minor, patch} = v
+	let { major, minor, patch } = v;
 	switch (k) {
 		case "patch": {
 			++patch;
@@ -43,11 +45,14 @@ export function bump(v, k) {
 		}
 	}
 
+	const { prerelease, build } = v;
 	return {
 		major: major,
 		minor: minor,
-		patch: patch
-	}
+		patch: patch,
+		prerelease: prerelease,
+		build: build,
+	};
 }
 
 /**
@@ -81,13 +86,49 @@ export function parse(s) {
 	}
 
 	// Remove any pre-release info
-	const index = s.indexOf("-");
+	const dashIndex = s.indexOf("-");
+	const plusIndex = s.indexOf("+");
+
+	/**
+	 * @type {string[]}
+	 */
+	let prerelease = [];
+
+	/**
+	 * @type {string[]}
+	 */
+	let build = [];
+
+	// 1.2.3-beta.0.1
+	if (dashIndex != -1 && plusIndex == -1) {
+		const prereleaseString = s.slice(dashIndex + 1);
+		prerelease = prereleaseString.split(".");
+	}
+
+	if (plusIndex != -1 && dashIndex == -1) {
+		const buildString = s.slice(plusIndex + 1);
+		prerelease = buildString.split(".");
+	}
+
+	if (plusIndex != -1 && dashIndex != -1) {
+		const prereleaseString = s.slice(dashIndex + 1, plusIndex);
+		const buildString = s.slice(plusIndex + 1);
+		prerelease = prereleaseString.split(".");
+		build = buildString.split(".");
+	}
 
 	let temporary = s;
 
-	if (index !== -1) {
-		temporary = s.slice(0, index);
+	let endIndex;
+
+	if (dashIndex !== -1) {
+		endIndex = dashIndex;
+	} else if (plusIndex !== -1) {
+		endIndex = plusIndex;
 	}
+
+	// endIndex is undefined if the version hasn't pre-release or build info
+	temporary = s.slice(0, endIndex);
 
 	// split by dots
 	const parts = temporary.split(".");
@@ -96,6 +137,8 @@ export function parse(s) {
 		major: +parts[0],
 		minor: +parts[1],
 		patch: +parts[2],
+		prerelease: prerelease,
+		build: build,
 	});
 }
 
@@ -110,5 +153,15 @@ export function versionToString(v) {
 		return "";
 	}
 
-	return `${v.major}.${v.minor}.${v.patch}`;
+	let result = `${v.major}.${v.minor}.${v.patch}`;
+
+	if (v.prerelease.length > 0) {
+		result += "-" + v.prerelease.join(".");
+	}
+
+	if (v.build.length > 0) {
+		result += "+" + v.build.join(".");
+	}
+
+	return result;
 }
