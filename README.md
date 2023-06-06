@@ -77,6 +77,8 @@ There're also a few optional flags:
 
 - `--commit`, `-c` - if set, adds all files listed in `bp.conf.js` to git
   and create a commit with the "Bump version" message.
+- `--tag`, `-t` - create a tag after version increment with new version as
+  annotate message
 - `--verbose`, `-v` - print the list of files and the result of version replacement
   in them. 
 
@@ -90,4 +92,4 @@ npx bp bump --patch --commit
 
 - [ ] Get rid of `replace-in-file` package dependency
 - [ ] Add `set` command to manually set the version
-- [ ] Create tags in git, not only commits
+- [x] Create tags in git, not only commits
