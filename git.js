@@ -1,6 +1,6 @@
 //@ts-check
 
-import {spawnSync} from "node:child_process";
+import { spawnSync } from "node:child_process";
 
 /**
  * Runs specified command and returns
@@ -12,28 +12,28 @@ import {spawnSync} from "node:child_process";
 function runCommand(command, arguments_, options) {
 	const result = spawnSync(command, arguments_, options);
 
-	return result
+	return result;
 }
 
 /**
  * Runs specified command and returns its output.
  * If any error occured, returns undefined
- * 
+ *
  * @param {string} command The command to run
  * @param {string[]} arguments_ List of string arguments_
  * @returns {string | undefined}
  */
 function runAndGetOutput(command, arguments_) {
-	const result = runCommand(command, arguments_, {encoding: "utf8"});
+	const result = runCommand(command, arguments_, { encoding: "utf8" });
 
-	return result.status == 0 ? String(result.stdout) : undefined
+	return result.status == 0 ? String(result.stdout) : undefined;
 }
 
 /**
  * Returns true if current git repository has modified files.
  * Also returns true if any error has occured during git command
  * execution.
- * 
+ *
  * @returns boolean
  */
 export function isDirty() {
@@ -45,7 +45,7 @@ export function isDirty() {
 	}
 
 	// TODO: Fix that on Windows - probably it will be "\r\n"
-	const files = statusOutput.split("\n")
+	const files = statusOutput.split("\n");
 
 	for (const line of files) {
 		const trimmedLine = line.trim();
@@ -59,7 +59,7 @@ export function isDirty() {
 
 /**
  * Commits specified files with "Bump version" message
- * 
+ *
  * @param {string[]} files List of files to add
  */
 export function bumpWithFiles(files) {
@@ -70,5 +70,26 @@ export function bumpWithFiles(files) {
 	}
 
 	runCommand("git", ["commit", "-m", "Bump version"]);
+}
 
+/**
+ * Create tag in a git repository
+ *
+ * @param {string} tagName Tag
+ */
+export function tag(tagName) {
+	if (!tagName) {
+		return;
+	}
+	const tagResult = runCommand("git", [
+		"tag",
+		"--annotate",
+		tagName,
+		"-m",
+		tagName,
+	]);
+
+	if (!tagResult) {
+		return;
+	}
 }

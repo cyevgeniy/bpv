@@ -1,6 +1,6 @@
 // @ts-check
 import { loadConfig } from "./config.js";
-import { bumpWithFiles, isDirty } from "./git.js";
+import { bumpWithFiles, isDirty, tag } from "./git.js";
 import process from "node:process";
 import { bump, parse, versionToString } from "./sv.js";
 import replace from "replace-in-file";
@@ -17,7 +17,8 @@ cli.option("--major", "Bump major version number")
 		"-v, --verbose",
 		"Print list of files with version update status for each of them"
 	)
-	.option("-c, --commit", "Commit after bump");
+	.option("-c, --commit", "Commit after bump")
+	.option("-t, --tag", "Create a tag in the git repository")
 
 cli.command("bump").action(run);
 
@@ -35,7 +36,7 @@ function getReplaceRegexp(versionTemplate, version) {
 		return;
 	}
 
-	const _version = version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	const _version = version.replaceAll(/[$()*+.?[\\\]^{|}]/g, '\\$&');
 
 	const source = versionTemplate.replaceAll("{{version}}", _version);
 	return new RegExp(source, "g");
@@ -141,5 +142,9 @@ async function run(options) {
 
 	if (options.commit) {
 		bumpWithFiles(files);
+	}
+
+	if (options.tag) {
+		tag(versionToString(newVersion))
 	}
 }
