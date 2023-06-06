@@ -16,6 +16,12 @@
         "bin",
         "dist"
     ],
+    "keywords": [
+        "bp",
+        "versioning",
+        "version-increment",
+        "version-bump"
+    ],
     "type": "module",
     "author": "Evgeny Chaban",
     "license": "ISC",
