@@ -35,7 +35,9 @@ function getReplaceRegexp(versionTemplate, version) {
 		return;
 	}
 
-	const source = versionTemplate.replaceAll("{{version}}", version);
+	const _version = version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+	const source = versionTemplate.replaceAll("{{version}}", _version);
 	return new RegExp(source, "g");
 }
 
@@ -99,7 +101,7 @@ async function run(options) {
 		}
 	}
 
-	let files = [CONF_FILE];
+	let files = [];
 
 	for (const rule of config.rules) {
 		const fromRegExp = getReplaceRegexp(
