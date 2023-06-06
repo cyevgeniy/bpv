@@ -90,6 +90,8 @@ npx bp bump --patch --commit
 
 ## TODO
 
+- [ ] Check if git is available before commit/tag
+- [ ] Add support for other VCS (mercurial)
 - [ ] Get rid of `replace-in-file` package dependency
 - [ ] Add `set` command to manually set the version
 - [x] Create tags in git, not only commits
