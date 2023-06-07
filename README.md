@@ -7,6 +7,18 @@ semver versions in your project. It takes the current
 version, increases it, and then updates all matches
 in the specified files with the new version.
 
+## Installation
+
+```
+npm i bpv
+```
+
+Or, you may want to install it globally:
+
+```
+npm i -g bpv
+```
+
 ## Configuration
 
 Bpv expects a `bp.conf.json` file, which
