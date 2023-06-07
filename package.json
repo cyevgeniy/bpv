@@ -1,5 +1,5 @@
 {
-    "name": "bp",
+    "name": "bpv",
     "version": "0.0.2",
     "description": "Version bumper",
     "main": "./dist/bundle.js",
@@ -10,14 +10,14 @@
         "typecheck": "npx tsc --noEmit"
     },
     "bin": {
-        "bp": "./bin/cli.js"
+        "bpv": "./bin/cli.js"
     },
     "files": [
         "bin",
         "dist"
     ],
     "keywords": [
-        "bp",
+        "bpv",
         "versioning",
         "version-increment",
         "version-bump"
