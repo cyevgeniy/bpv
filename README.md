@@ -1,15 +1,15 @@
-# bp - version bump
+# bpv - BumP Version
 
 **In development**
 
-Bp is a package that helps you to increase
+Bpv is a package that helps you to increase
 semver versions in your project. It takes the current
 version, increases it, and then updates all matches
 in the specified files with the new version.
 
 ## Configuration
 
-Bp expects a `bp.conf.json` file, which
+Bpv expects a `bp.conf.json` file, which
 looks like this: 
 
 ```
@@ -70,7 +70,7 @@ Use `bump` command with a version number to increment (major, minor, or patch),
 for example:
 
 ```
-npx bp bump --major
+npx bpv bump --major
 ```
 
 There're also a few optional flags:
@@ -85,11 +85,12 @@ There're also a few optional flags:
 Bump version and create a "Bump version" commit: 
 
 ```
-npx bp bump --patch --commit
+npx bpv bump --patch --commit
 ```
 
 ## TODO
 
+- [ ] Use `bpv.conf.json` config file instead of `bp.conf.json`
 - [ ] Check if git is available before commit/tag
 - [ ] Add support for other VCS (mercurial)
 - [ ] Get rid of `replace-in-file` package dependency
