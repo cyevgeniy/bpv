@@ -67,7 +67,14 @@ function generateMessage(message) {
  *
  */
 export function loadConfig(fname) {
-	const data = readFileSync(fname, "utf8");
+	let data;
+
+	try {
+		data = readFileSync(fname, "utf8");
+	} catch {
+		return notOk(generateMessage(
+			"Can't load a config file.\nMake sure that " +  fname + " exists."));
+	}
 
 	let config;
 
