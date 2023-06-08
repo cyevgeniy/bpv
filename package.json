@@ -1,6 +1,6 @@
 {
     "name": "bpv",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Version bumper",
     "main": "./dist/bundle.js",
     "scripts": {
