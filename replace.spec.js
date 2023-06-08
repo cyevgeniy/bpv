@@ -37,6 +37,11 @@ describe("Replace in file", () => {
 		expect(result.ok).toBeFalsy();
 	});
 
+	it("Fails if regular expression is missing the 'g' flag", async () => {
+		const result = await replaceInFile({ file: "test1", from: /test/, to: "c" });
+		expect(result.ok).toBeFalsy();
+	});
+
 	it("Works if to property is an empty string", async () => {
 		const result = await replaceInFile({
 			file: "test1",
@@ -53,6 +58,12 @@ describe("Replace in file", () => {
 		await replaceInFile({ file: "test1", from: /test/g, to: "b" });
 		const newContent = await readFile("test1", { encoding: "utf8" });
 		expect(newContent).toBe("b s tring ring");
+	});
+
+	it("Replaces all matches in a file", async () => {
+		await replaceInFile({ file: "test1", from: /ring/g, to: "c" });
+		const newContent = await readFile("test1", { encoding: "utf8" });
+		expect(newContent).toBe("test s tc c");
 	});
 
 	it("Returns correct result if replace successful", async () => {
