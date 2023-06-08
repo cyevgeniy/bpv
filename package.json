@@ -25,6 +25,10 @@
     "type": "module",
     "author": "Evgeny Chaban",
     "license": "ISC",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/cyevgeniy/bp.git"
+    },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^25.0.0",
         "@rollup/plugin-node-resolve": "^15.1.0",
