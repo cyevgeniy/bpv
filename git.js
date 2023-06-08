@@ -58,18 +58,34 @@ export function isDirty() {
 }
 
 /**
- * Commits specified files with "Bump version" message
- *
- * @param {string[]} files List of files to add
+ * Adds all indexed files to the next commit
  */
-export function bumpWithFiles(files) {
-	const addResult = runCommand("git", ["add", ...files]);
+function add() {
+	return runCommand("git", ["add", "-u"]);
+}
 
-	if (!addResult) {
+/**
+ * Performs commit
+ *
+ * @param {string} message - Commit message
+ */
+function commit(message) {
+	return runCommand("git", ["commit", "-m", message]);
+}
+
+/**
+ * Commits changes in all modified files.
+ *
+ * @param {string} [message] - Commit message.
+ */
+export function bumpAllFiles(message = "Bump version") {
+	const addResult = add();
+
+	if (addResult.status != 0) {
 		return;
 	}
 
-	runCommand("git", ["commit", "-m", "Bump version"]);
+	commit(message);
 }
 
 /**
@@ -81,15 +97,22 @@ export function tag(tagName) {
 	if (!tagName) {
 		return;
 	}
-	const tagResult = runCommand("git", [
+	runCommand("git", [
 		"tag",
 		"--annotate",
 		tagName,
 		"-m",
 		tagName,
 	]);
+}
 
-	if (!tagResult) {
-		return;
-	}
+/**
+ * Checks if current directory is inside a git repository
+ *
+ * @returns {boolean}
+ */
+export function isUsable() {
+	const result = runCommand("git", ["rev-parse"]);
+
+	return result.status == 0;
 }

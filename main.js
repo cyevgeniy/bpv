@@ -1,6 +1,6 @@
 // @ts-check
 import { loadConfig } from "./config.js";
-import { bumpWithFiles, isDirty, tag } from "./git.js";
+import { bumpAllFiles, isDirty, tag, isUsable } from "./git.js";
 import process from "node:process";
 import { bump, parse, versionToString } from "./sv.js";
 import { replaceInFile } from "./replace.js";
@@ -18,7 +18,7 @@ cli.option("--major", "Bump major version number")
 		"Print list of files with version update status for each of them"
 	)
 	.option("-c, --commit", "Commit after bump")
-	.option("-t, --tag", "Create a tag in the git repository")
+	.option("-t, --tag", "Create a tag in the git repository");
 
 cli.command("bump").action(run);
 
@@ -36,7 +36,7 @@ function getReplaceRegexp(versionTemplate, version) {
 		return;
 	}
 
-	const _version = version.replaceAll(/[$()*+.?[\\\]^{|}]/g, '\\$&');
+	const _version = version.replaceAll(/[$()*+.?[\\\]^{|}]/g, "\\$&");
 
 	const source = versionTemplate.replaceAll("{{version}}", _version);
 	return new RegExp(source, "g");
@@ -54,8 +54,8 @@ function printReplaceResults(replaceResult) {
 	}
 
 	console.log(
-			`File: ${replaceResult.file} changed: ${replaceResult.hasChanged}`
-		);
+		`File: ${replaceResult.file} changed: ${replaceResult.hasChanged}`
+	);
 }
 
 /**
@@ -81,6 +81,13 @@ async function run(options) {
 		process.exit(1);
 	}
 
+	if ((options.commit || options.tag) && !isUsable()) {
+		console.error(
+			"Can't use git because current directory is not inside a git repository"
+		);
+		process.exit(1);
+	}
+
 	if (options.commit && isDirty()) {
 		console.error("Can't commit because the repository has modified files");
 		process.exit(1);
@@ -99,8 +106,6 @@ async function run(options) {
 			newVersion = bump(newVersion, key);
 		}
 	}
-
-	let files = [];
 
 	for (const rule of config.rules) {
 		const fromRegExp = getReplaceRegexp(
@@ -134,15 +139,13 @@ async function run(options) {
 		if (options.verbose) {
 			printReplaceResults(result.value);
 		}
-
-		files.push(rule.file);
 	}
 
 	if (options.commit) {
-		bumpWithFiles(files);
+		bumpAllFiles();
 	}
 
 	if (options.tag) {
-		tag(versionToString(newVersion))
+		tag(versionToString(newVersion));
 	}
 }
