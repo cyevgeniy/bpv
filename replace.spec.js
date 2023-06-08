@@ -75,7 +75,7 @@ describe("Replace in file", () => {
 		expect(result.value).toStrictEqual({ file: "test1", hasChanged: true });
 	});
 
-	it("Returns correct result if the file hasn't any match", async () => {
+	it("Returns correct result if the file doesn't have any match", async () => {
 		const result = await replaceInFile({
 			file: "test1",
 			from: /abcde/g,
