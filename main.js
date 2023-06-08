@@ -3,7 +3,7 @@ import { loadConfig } from "./config.js";
 import { bumpWithFiles, isDirty, tag } from "./git.js";
 import process from "node:process";
 import { bump, parse, versionToString } from "./sv.js";
-import replace from "replace-in-file";
+import { replaceInFile } from "./replace.js";
 import cac from "cac";
 
 const CONF_FILE = "bp.conf.json";
@@ -45,19 +45,17 @@ function getReplaceRegexp(versionTemplate, version) {
 /**
  * Prints replace results.
  *
- * @param {import('replace-in-file').ReplaceResult[]} results
+ * @param {import('./replace.js').ReplaceResult} replaceResult
  *
  */
-function printReplaceResults(results) {
-	if (!results) {
+function printReplaceResults(replaceResult) {
+	if (!replaceResult) {
 		return;
 	}
 
-	for (const replaceResult of results) {
-		console.log(
+	console.log(
 			`File: ${replaceResult.file} changed: ${replaceResult.hasChanged}`
 		);
-	}
 }
 
 /**
@@ -115,10 +113,10 @@ async function run(options) {
 		}
 
 		/**
-		 * @type {import ('replace-in-file').ReplaceInFileConfig}
+		 * @type {import ('./replace.js').ReplaceOption}
 		 */
-		const replaceOptions = {
-			files: rule.file,
+		const replaceOption = {
+			file: rule.file,
 			from: fromRegExp,
 			to: rule.version.replaceAll(
 				"{{version}}",
@@ -126,15 +124,15 @@ async function run(options) {
 			),
 		};
 
-		try {
-			const results = await replace.replaceInFile(replaceOptions);
+		const result = await replaceInFile(replaceOption);
 
-			if (options.verbose) {
-				printReplaceResults(results);
-			}
-		} catch (/** @type {any} **/ error) {
-			console.error("Error:", error.message);
+		if (!result.ok) {
+			console.error(result.message);
 			process.exit(1);
+		}
+
+		if (options.verbose) {
+			printReplaceResults(result.value);
 		}
 
 		files.push(rule.file);
