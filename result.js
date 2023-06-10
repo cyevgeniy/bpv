@@ -17,10 +17,7 @@ export function notOk(message) {
     return {
         ok: false,
         value: undefined,
-        message:
-            typeof message === "function" || typeof message === "object"
-                ? ""
-                : message ?? "",
+        message: message ?? "",
     };
 }
 
@@ -34,9 +31,6 @@ export function ok(value, message = "") {
     return {
         ok: true,
         value: value,
-        message:
-            typeof message === "function" || typeof message === "object"
-                ? ""
-                : message ?? "",
+        message: message ?? "",
     };
 }
