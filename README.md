@@ -36,7 +36,7 @@ looks like this:
 - `currentVersion` holds current software's version.
 - `rules` is an array of objects with information about files that contain version
   strings and how version strings look. `{{version}}` in the "version" property
-  is an actual semver version. Use `\"` if you want to escape quotes.
+  is an actual semver version. Use `\"` to escape quotes.
 
 ### Example 
 
@@ -107,6 +107,6 @@ npx bpv bump --patch --commit
 - [ ] Use `bpv.conf.json` config file instead of `bp.conf.json`
 - [x] Check if git is available before commit/tag
 - [ ] Add support for other VCS (mercurial)
-- [ ] Get rid of `replace-in-file` package dependency
+- [x] Get rid of `replace-in-file` package dependency
 - [ ] Add `set` command to manually set the version
 - [x] Create tags in git, not only commits
