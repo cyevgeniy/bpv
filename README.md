@@ -78,6 +78,8 @@ Note that bp.conf.json is also presented in the config file.
 
 ## Usage
 
+### Increment version
+
 Use `bump` command with a version number to increment (major, minor, or patch),
 for example:
 
@@ -102,11 +104,22 @@ Bump version and create a "Bump version" commit:
 npx bpv bump --patch --commit
 ```
 
+### Set version
+
+Use the `set` command to set a version directly:
+
+```
+npx bpv set "1.0.0-beta.0"
+```
+
+The `set` command also accepts `--commit` and `--tag` and `--verbose` flags.
+
+
 ## TODO
 
 - [ ] Use `bpv.conf.json` config file instead of `bp.conf.json`
 - [x] Check if git is available before commit/tag
 - [ ] Add support for other VCS (mercurial)
 - [x] Get rid of `replace-in-file` package dependency
-- [ ] Add `set` command to manually set the version
+- [x] Add `set` command to manually set the version
 - [x] Create tags in git, not only commits
