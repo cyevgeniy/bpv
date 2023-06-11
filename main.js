@@ -189,7 +189,7 @@ async function runBump(options) {
 		}
 	}
 
-	makeReplacements(
+	await makeReplacements(
 		config.rules,
 		config.currentVersion,
 		versionToString(newVersion),
@@ -243,7 +243,7 @@ async function runSet(version, options) {
 		);
 	}
 
-	makeReplacements(
+	await makeReplacements(
 		config.rules,
 		config.currentVersion,
 		version,
