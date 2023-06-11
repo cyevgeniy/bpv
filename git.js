@@ -40,7 +40,7 @@ export function isDirty() {
 	const statusOutput = runAndGetOutput("git", ["status", "-s"]);
 
 	// Return true on any error
-	if (!statusOutput) {
+	if (statusOutput === undefined) {
 		return true;
 	}
 
