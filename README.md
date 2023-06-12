@@ -112,7 +112,7 @@ Use the `set` command to set a version directly:
 npx bpv set "1.0.0-beta.0"
 ```
 
-The `set` command also accepts `--commit` and `--tag` and `--verbose` flags.
+The `set` command also accepts `--commit`, `--tag` and `--verbose` flags.
 
 
 ## TODO
