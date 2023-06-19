@@ -20,7 +20,7 @@ cli.option("--major", "Bump major version number")
 	)
 	.option("-c, --commit", "Commit after bump")
 	.option("-t, --tag", "Create a tag in the git repository")
-	.option("-d, --dry-run", "Print results, but don't chane any files");
+	.option("-d, --dry", "Print results, but don't chane any files");
 
 cli.command("bump").action(runBump);
 cli.command("set <version>").action(runSet);
@@ -85,7 +85,7 @@ function printReplaceResults(replaceResult) {
  * @param {string} currentVersion - Current version
  * @param {string} newVersion - New version
  * @param {string} pattern - Version string pattern
- * @param {boolean} dryRun If true, doesn't change any files. Instead, returns result as
+ * @param {boolean} dry If true, doesn't change any files. Instead, returns result as
  * files were changed
  * @returns {Promise<import("./result.js").Result>}
  */
@@ -94,7 +94,7 @@ async function replaceVersionInFile(
 	currentVersion,
 	newVersion,
 	pattern,
-	dryRun
+	dry
 ) {
 	const fromRegExp = getReplaceRegexp(pattern, currentVersion);
 
@@ -111,7 +111,7 @@ async function replaceVersionInFile(
 		to: pattern.replaceAll("{{version}}", newVersion),
 	};
 
-	return await replaceInFile(replaceOption, dryRun);
+	return await replaceInFile(replaceOption, dry);
 }
 
 /**
@@ -123,14 +123,14 @@ async function replaceVersionInFile(
  * @param {string} currentVersion Current version
  * @param {string} newVersion New version
  * @param {boolean} printResults If true, prints replace results
- * @param {boolean} dryRun If true, just prints results, but doesn't make any replacements
+ * @param {boolean} dry If true, just prints results, but doesn't make any replacements
  */
 async function makeReplacements(
 	rules,
 	currentVersion,
 	newVersion,
 	printResults,
-	dryRun
+	dry
 ) {
 	for (const rule of rules) {
 		const result = await replaceVersionInFile(
@@ -138,14 +138,14 @@ async function makeReplacements(
 			currentVersion,
 			newVersion,
 			rule.version,
-			dryRun
+			dry
 		);
 
 		if (!result.ok) {
 			printErrorAndExit(result.message);
 		}
 
-		if (printResults || dryRun) {
+		if (printResults || dry) {
 			printReplaceResults(result.value);
 		}
 	}
@@ -156,11 +156,11 @@ async function makeReplacements(
  *
  * @param {string | import("./sv.js").Version} newVersion A new version  that will be set after applying a command
  */
-function printDryRunNotice(newVersion) {
+function printdryNotice(newVersion) {
 	console.log("DRY RUN MODE IS ON. NO FILES WILL BE ACTUALLY MODIFIED\n");
 
 	console.log(
-		"New version is: ",
+		"New version is:",
 		typeof newVersion === "string"
 			? newVersion
 			: versionToString(newVersion)
@@ -217,8 +217,8 @@ async function runBump(options) {
 		}
 	}
 
-	if (options.dryRun) {
-		printDryRunNotice(newVersion);
+	if (options.dry) {
+		printdryNotice(newVersion);
 	}
 
 	await makeReplacements(
@@ -226,10 +226,10 @@ async function runBump(options) {
 		config.currentVersion,
 		versionToString(newVersion),
 		options.verbose,
-		options.dryRun
+		options.dry
 	);
 
-	if (!options.dryRun) {
+	if (!options.dry) {
 		if (options.commit) {
 			bumpAllFiles();
 		}
@@ -278,8 +278,8 @@ async function runSet(version, options) {
 		);
 	}
 
-	if (options.dryRun) {
-		printDryRunNotice(version);
+	if (options.dry) {
+		printdryNotice(version);
 	}
 
 	await makeReplacements(
@@ -287,10 +287,10 @@ async function runSet(version, options) {
 		config.currentVersion,
 		version,
 		options.verbose,
-		options.dryRun
+		options.dry
 	);
 
-	if (!options.dryRun) {
+	if (!options.dry) {
 		if (options.commit) {
 			bumpAllFiles();
 		}
