@@ -43,9 +43,11 @@ async function isFileExists(file) {
  * Replace content in one file.
  *
  * @param {ReplaceOption} replaceOption
+ * @param {boolean} dryRun Return only replace result, but don't change
+ * change file
  * @return {Promise<Result>}
  */
-export async function replaceInFile(replaceOption) {
+export async function replaceInFile(replaceOption, dryRun=false) {
 	// Don't use `!replaceOption.to` form, because empty string
 	// is a valid value for replacement
 	if (!replaceOption.file || !replaceOption.from || replaceOption.to == undefined) {
@@ -81,11 +83,14 @@ export async function replaceInFile(replaceOption) {
 		return notOk("Can't replace file content")
 	}
 
-	// Write the whole file
-	try {
-		await writeFile(replaceOption.file, newFileContent);
-	} catch {
-		return notOk("Can't write to the file");
+	
+	if (!dryRun) {
+		// Write the whole file
+		try {
+			await writeFile(replaceOption.file, newFileContent);
+		} catch {
+			return notOk("Can't write to the file");
+		}
 	}
 
 	return ok({file: replaceOption.file, hasChanged: matches});

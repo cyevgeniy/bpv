@@ -86,4 +86,22 @@ describe("Replace in file", () => {
 			hasChanged: false,
 		});
 	});
+
+	it("Works with dry run option", async () => {
+		const result = await replaceInFile({
+			file: "test1",
+			from: /ring/g,
+			to: ""
+		}, true);
+
+		expect(result.value).toStrictEqual({
+			file: "test1",
+			hasChanged: true
+		});
+
+		const fileContent = await readFile("test1", {encoding: "utf8"});
+
+		// Original file shouldn't be changed
+		expect(fileContent).toBe(testContent);
+	})
 });
