@@ -114,6 +114,40 @@ npx bpv set "1.0.0-beta.0"
 
 The `set` command also accepts `--commit`, `--tag` and `--verbose` flags.
 
+### Test version bump
+
+You can check how a command will work without
+any real changes with a `--dry` (`-d`) option.
+It prints a new version and the list of files that will be changed:
+
+```
+npx bpv bump --major --dry
+```
+
+Output: 
+
+```
+DRY RUN MODE IS ON. NO FILES WILL BE ACTUALLY MODIFIED
+
+New version is: 2.0.0
+File: bp.conf.json changed: true
+File: app/last_changelog.md changed: true
+```
+
+You can use `--dry` option with `--commit` or `--tag` options as well.
+No files will be committed and no tags will be created, but you can
+see any potential issues:
+
+```
+npx bpv bump --major -dct
+```
+
+Output:
+
+```
+Can't commit because the repository has modified files
+```
+
 
 ## TODO
 
