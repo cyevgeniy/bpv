@@ -3,14 +3,14 @@
 import {runCommand, runAndGetOutput} from "./cmd.js"
 
 /**
- * Returns true if current git repository has modified files.
- * Also returns true if any error has occured during git command
+ * Returns true if current repository has modified files.
+ * Also returns true if any error has occured during command
  * execution.
  *
  * @returns boolean
  */
 export function isDirty() {
-	const statusOutput = runAndGetOutput("git", ["status", "-s"]);
+	const statusOutput = runAndGetOutput("hg", ["status", "-umard"]);
 
 	// Return true on any error
 	if (statusOutput === undefined) {
@@ -29,36 +29,13 @@ export function isDirty() {
 
 	return false;
 }
-
-/**
- * Adds all indexed files to the next commit
- */
-function add() {
-	return runCommand("git", ["add", "-u"]);
-}
-
-/**
- * Performs commit
- *
- * @param {string} message - Commit message
- */
-function commit(message) {
-	return runCommand("git", ["commit", "-m", message]);
-}
-
 /**
  * Commits changes in all modified files.
  *
  * @param {string} [message] - Commit message.
  */
 export function bumpAllFiles(message = "Bump version") {
-	const addResult = add();
-
-	if (addResult.status != 0) {
-		return;
-	}
-
-	commit(message);
+	runCommand("hg", ["ci", "-m", message]);
 }
 
 /**
@@ -70,12 +47,11 @@ export function tag(tagName) {
 	if (!tagName) {
 		return;
 	}
-	runCommand("git", [
+	runCommand("hg", [
 		"tag",
-		"--annotate",
 		tagName,
-		"-m",
-		tagName,
+		"--message",
+		tagName
 	]);
 }
 
@@ -85,7 +61,7 @@ export function tag(tagName) {
  * @returns {boolean}
  */
 export function isUsable() {
-	const result = runCommand("git", ["rev-parse"]);
+	const result = runCommand("hg", ["root"]);
 
 	return result.status == 0;
 }

@@ -1,6 +1,6 @@
 // @ts-check
 import { loadConfig } from "./config.js";
-import { bumpAllFiles, isDirty, tag, isUsable } from "./git.js";
+import { useVCS } from "./vcs.js";
 import process from "node:process";
 import { bump, parse, versionToString } from "./sv.js";
 import { replaceInFile } from "./replace.js";
@@ -8,6 +8,8 @@ import { notOk } from "./result.js";
 import cac from "cac";
 
 const CONF_FILE = "bp.conf.json";
+
+const vcs = useVCS();
 
 const cli = cac("bumper");
 
@@ -188,13 +190,13 @@ async function runBump(options) {
 		printErrorAndExit(parseResult.message);
 	}
 
-	if ((options.commit || options.tag) && !isUsable()) {
+	if ((options.commit || options.tag) && vcs === undefined) {
 		printErrorAndExit(
-			"Can't use git because current directory is not inside a git repository"
+			"Can't use VCS because current directory is not inside a known VCS repository"
 		);
 	}
 
-	if (options.commit && isDirty()) {
+	if (options.commit && vcs?.isDirty()) {
 		printErrorAndExit(
 			"Can't commit because the repository has modified files"
 		);
@@ -231,11 +233,11 @@ async function runBump(options) {
 
 	if (!options.dry) {
 		if (options.commit) {
-			bumpAllFiles();
+			vcs?.commit();
 		}
 
 		if (options.tag) {
-			tag(versionToString(newVersion));
+			vcs?.tag(versionToString(newVersion));
 		}
 	}
 }
@@ -266,13 +268,13 @@ async function runSet(version, options) {
 
 	const config = configResult.value;
 
-	if ((options.commit || options.tag) && !isUsable()) {
+	if ((options.commit || options.tag) && vcs === undefined) {
 		printErrorAndExit(
-			"Can't use git because current directory is not inside a git repository"
+			"Can't use VCS because current directory is not inside a known VCS repository"
 		);
 	}
 
-	if (options.commit && isDirty()) {
+	if (options.commit && vcs?.isDirty()) {
 		printErrorAndExit(
 			"Can't commit because the repository has modified files"
 		);
@@ -292,11 +294,11 @@ async function runSet(version, options) {
 
 	if (!options.dry) {
 		if (options.commit) {
-			bumpAllFiles();
+			vcs?.commit();
 		}
 
 		if (options.tag) {
-			tag(versionToString(parsedVersion));
+			vcs?.tag(versionToString(parsedVersion));
 		}
 	}
 }
