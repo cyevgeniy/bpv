@@ -22,7 +22,7 @@ export function isDirty() {
 
 	for (const line of files) {
 		const trimmedLine = line.trim();
-		if (trimmedLine.length > 0 && trimmedLine[0] == "M") {
+		if (trimmedLine[0] === "M") {
 			return true;
 		}
 	}
