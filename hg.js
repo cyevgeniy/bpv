@@ -39,7 +39,7 @@ export function bumpAllFiles(message = "Bump version") {
 }
 
 /**
- * Create tag in a git repository
+ * Create tag in a mercurial repository
  *
  * @param {string} tagName Tag
  */
@@ -56,7 +56,7 @@ export function tag(tagName) {
 }
 
 /**
- * Checks if current directory is inside a git repository
+ * Checks if current directory is inside a mercurial repository
  *
  * @returns {boolean}
  */
