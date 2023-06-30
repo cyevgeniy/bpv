@@ -89,10 +89,10 @@ npx bpv bump --major
 
 There're also a few optional flags:
 
-- `--commit`, `-c` - if set, adds all files listed in `bp.conf.js` to git
-  and create a commit with the "Bump version" message. Under the hood
-  `bpv` uses `git add -u` command to add files, so **files that are not
-  in the git index won't be commited**.
+- `--commit`, `-c` - if set, bpv creates
+  a commit with the "Bump version" message. Under the hood
+  `bpv` uses `git add -u` or `hg ci` commands to add files, so *files that are not
+  in the git index won't be commited*. **Supports git and mercurial.**
 - `--tag`, `-t` - create a tag after version increment with new version as
   annotate message
 - `--verbose`, `-v` - print the list of files and the result of version replacement
