@@ -37,11 +37,6 @@ export function useVCS() {
 	//prettier-ignore
 	const vcsName = gitIsUsable() ? "git" : (hgIsUsable() ? "hg" : "");
 
-	/**
-	 * @type Vcs
-	 */
-	let vcs;
-
 	return vcsName === ""
 		? undefined
 		: {
