@@ -6,6 +6,7 @@ import { bump, parse, versionToString } from "./sv.js";
 import { replaceInFile } from "./replace.js";
 import { notOk } from "./result.js";
 import cac from "cac";
+import pc from "picocolors";
 
 const CONF_FILE = "bp.conf.json";
 
@@ -75,9 +76,14 @@ function printReplaceResults(replaceResult) {
 		return;
 	}
 
-	console.log(
-		`File: ${replaceResult.file} changed: ${replaceResult.hasChanged}`
-	);
+  if (replaceResult.diffs.length > 0) {
+    console.log(`File: ${replaceResult.file}`);
+  }
+
+  for(const diff of replaceResult.diffs) {
+    console.log(pc.red(`- ${diff.before}`));
+    console.log(pc.green(`+ ${diff.after}`));
+  }
 }
 
 /**
@@ -159,13 +165,14 @@ async function makeReplacements(
  * @param {string | import("./sv.js").Version} newVersion A new version  that will be set after applying a command
  */
 function printdryNotice(newVersion) {
-	console.log("DRY RUN MODE IS ON. NO FILES WILL BE ACTUALLY MODIFIED\n");
+	console.log(pc.yellow("DRY RUN MODE IS ON. NO FILES WILL BE ACTUALLY MODIFIED\n"));
 
 	console.log(
 		"New version is:",
 		typeof newVersion === "string"
 			? newVersion
-			: versionToString(newVersion)
+			: versionToString(newVersion),
+    "\n"
 	);
 }
 

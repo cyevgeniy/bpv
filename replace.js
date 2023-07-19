@@ -9,10 +9,47 @@ import { stat, readFile, writeFile } from "node:fs/promises";
  * @property {string} to - Replace string
  */
 
+
+/**
+ * @typedef {Object} LineDiff
+ * @property {string} before A line before change
+ * @property {string} after A line after change
+ * @property {number} line Line number
+ */ 
+
+/**
+ * Returns result of replacement in a file
+ *
+ * @param {Array<string>} lines - File's lines 
+ * @param {ReplaceOption} replaceOption - Replace option
+ * @returns {Promise<Array<LineDiff>>} List of changes in a file
+ */
+export async function getFileReplace(lines, replaceOption) {
+  /**
+   * @type {Array<LineDiff>}
+   */
+  let result = []
+
+  for (const [lineNumber, line] of lines.entries()) {
+		const match = replaceOption.from.test(line);
+
+    if (match) {
+      result.push({
+        before: line,
+        after: line.replaceAll(replaceOption.from, replaceOption.to),
+        line: lineNumber + 1
+      })
+    }
+  }
+
+  return result;
+
+}
+
 /**
  * @typedef {Object} ReplaceResult
  * @property {string} file - File name
- * @property {boolean} hasChanged - Either file has been changed or not
+ * @property {Array<LineDiff>} diffs - Replace diff 
  */
 
 /**
@@ -60,6 +97,7 @@ export async function replaceInFile(replaceOption, dryRun=false) {
 		return notOk("The file doesn't exist")
 	}
 
+
 	let fileContent;
 
 	try {
@@ -68,30 +106,23 @@ export async function replaceInFile(replaceOption, dryRun=false) {
 		return notOk("Can't read file's content");
 	}
 
-	// Replace all matches in the file
-	let newFileContent;
-	let matches = false;
+  const lines = fileContent.split(/\r?\n/);
+  const usesR = /\r\n/.test(fileContent);
 
-	try {
-		newFileContent = fileContent.replaceAll(
-			replaceOption.from,
-			replaceOption.to
-		);
+  const lineDiffs = await getFileReplace(lines, replaceOption)
 
-		matches = replaceOption.from.test(fileContent);
-	} catch {
-		return notOk("Can't replace file content")
-	}
 
-	
-	if (!dryRun) {
-		// Write the whole file
+	if (!dryRun && lineDiffs.length > 0) {
+		for (const diff of lineDiffs) {
+			lines[diff.line - 1] = diff.after
+		}
+    
 		try {
-			await writeFile(replaceOption.file, newFileContent);
+			await writeFile(replaceOption.file, lines.join(usesR ? "\r\n" : "\n"));
 		} catch {
 			return notOk("Can't write to the file");
 		}
 	}
 
-	return ok({file: replaceOption.file, hasChanged: matches});
+	return ok({file: replaceOption.file, diffs: lineDiffs});
 }
