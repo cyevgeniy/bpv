@@ -146,7 +146,7 @@ export function parse(s) {
  * Returns string representation of a version.
  *
  * @param {Version} v version
- * @returns {string} - string representation of a version
+ * @returns {string} string representation of a version
  */
 export function versionToString(v) {
 	if (!v) {
