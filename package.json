@@ -1,6 +1,6 @@
 {
     "name": "bpv",
-    "version": "1.3.4",
+    "version": "0.2.2",
     "main": "./dist/bundle.js",
     "scripts": {
         "build-bundle": "rimraf dist && rollup --config rollup.config.js",
