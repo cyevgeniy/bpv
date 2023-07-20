@@ -69,7 +69,7 @@ And we want to increment version only in this file, our
 	"currentVersion": "1.0.3",
 	"rules": [
 		{"file": "bp.conf.json", "version": "\"currentVersion\": \"{{version}}\""},
-		{"file": "android/build.gradle", "version": "versionName \"{{version}}\"}
+		{"file": "android/build.gradle", "version": "versionName \"{{version}}\""}
 	]
 }
 ```
