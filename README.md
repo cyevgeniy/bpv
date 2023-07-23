@@ -153,7 +153,7 @@ Can't commit because the repository has modified files
 
 - [ ] Use `bpv.conf.json` config file instead of `bp.conf.json`
 - [x] Check if git is available before commit/tag
-- [ ] Add support for other VCS (mercurial)
+- [x] Add support for other VCS (mercurial)
 - [x] Get rid of `replace-in-file` package dependency
 - [x] Add `set` command to manually set the version
 - [x] Create tags in git, not only commits
