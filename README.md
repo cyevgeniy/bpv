@@ -1,7 +1,5 @@
 # bpv - BumP Version
 
-**In development**
-
 Bpv is a package that helps you to increase
 semver versions in your project. It takes the current
 version, increases it, and then updates all matches
