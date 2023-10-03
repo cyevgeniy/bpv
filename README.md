@@ -19,14 +19,14 @@ npm i -g bpv
 
 ## Configuration
 
-Bpv expects a `bp.conf.json` file, which
+Bpv expects a `bpv.conf.json` file, which
 looks like this: 
 
 ```
 {
 	"currentVersion": "20.0.3",
 	"rules": [
-		{"file": "bp.conf.json", "version": "\"currentVersion\": \"{{version}}\""},
+		{"file": "bpv.conf.json", "version": "\"currentVersion\": \"{{version}}\""},
 		{"file": "manifest.xml", "version": "\"version\": \"{{version}}\""}
 	]
 }
@@ -59,20 +59,20 @@ If we have a `build.gradle` file:
 ``` 
 
 And we want to increment version only in this file, our
-`bp.conf.json` should look so:
+`bpv.conf.json` should look so:
 
 
 ```
 {
 	"currentVersion": "1.0.3",
 	"rules": [
-		{"file": "bp.conf.json", "version": "\"currentVersion\": \"{{version}}\""},
+		{"file": "bpv.conf.json", "version": "\"currentVersion\": \"{{version}}\""},
 		{"file": "android/build.gradle", "version": "versionName \"{{version}}\""}
 	]
 }
 ```
 
-Note that bp.conf.json is also presented in the config file.
+Note that bpv.conf.json is also presented in the config file.
 
 ## Usage
 
@@ -128,7 +128,7 @@ Output:
 DRY RUN MODE IS ON. NO FILES WILL BE ACTUALLY MODIFIED
 
 New version is: 2.0.0
-File: bp.conf.json changed: true
+File: bpv.conf.json changed: true
 File: app/last_changelog.md changed: true
 ```
 
@@ -149,7 +149,7 @@ Can't commit because the repository has modified files
 
 ## TODO
 
-- [ ] Use `bpv.conf.json` config file instead of `bp.conf.json`
+- [x] Use `bp.conf.json` config file instead of `bpv.conf.json`
 - [x] Check if git is available before commit/tag
 - [x] Add support for other VCS (mercurial)
 - [x] Get rid of `replace-in-file` package dependency

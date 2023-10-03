@@ -8,7 +8,7 @@ import { notOk } from "./result.js";
 import cac from "cac";
 import pc from "picocolors";
 
-const CONF_FILE = "bp.conf.json";
+const CONF_FILE = "bpv.conf.json";
 
 const vcs = useVCS();
 
