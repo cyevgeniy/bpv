@@ -42,7 +42,7 @@ try {
  * @param {string} errorMessage Error message
  */
 function printErrorAndExit(errorMessage) {
-	console.error(errorMessage);
+	console.error(pc.red(errorMessage));
 	process.exit(1);
 }
 
