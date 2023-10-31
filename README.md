@@ -8,7 +8,7 @@ in the specified files with the new version.
 ## Installation
 
 ```
-npm i bpv
+npm i -D bpv
 ```
 
 Or, you may want to install it globally:
