@@ -13,6 +13,7 @@ import { ok, notOk } from "./result.js";
  * @typedef Config
  * @property {string} currentVersion
  * @property {Rule[]} rules
+ * @property {string} [commitMessage] The commit message that will be used after version increment
  */
 
 /**

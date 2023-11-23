@@ -17,7 +17,7 @@ import {
 /**
  * @typedef {Object} Vcs
  * @property {(tagName: string) => void} tag
- * @property {() => void} commit
+ * @property {(message?: string) => void} commit
  * @property {() => boolean} isUsable
  * @property {() => boolean} isDirty
  */
@@ -45,8 +45,8 @@ export function useVCS() {
 					tag(t) {
 						gitTag(t);
 					},
-					commit() {
-						gitBump();
+				  commit(message) {
+						gitBump(message);
 					},
 					isUsable() {
 						return gitIsUsable();
@@ -61,8 +61,8 @@ export function useVCS() {
 					tag(t) {
 						hgTag(t);
 					},
-					commit() {
-						hgBump();
+				  commit(message) {
+						hgBump(message);
 					},
 					isUsable() {
 						return hgIsUsable();

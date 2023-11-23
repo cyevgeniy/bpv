@@ -240,7 +240,7 @@ async function runBump(options) {
 
 	if (!options.dry) {
 		if (options.commit) {
-			vcs?.commit();
+			vcs?.commit(config.commitMessage);
 		}
 
 		if (options.tag) {
