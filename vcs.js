@@ -37,6 +37,9 @@ export function useVCS() {
   //prettier-ignore
   const vcsName = gitIsUsable() ? "git" : (hgIsUsable() ? "hg" : "");
 
+  // Default commit message
+  const commitMessage = "Bump version";
+
   return vcsName === ""
     ? undefined
     : {
@@ -45,7 +48,7 @@ export function useVCS() {
 	tag(t) {
 	  gitTag(t);
 	},
-	commit(message) {
+	commit(message = commitMessage) {
 	  gitBump(message);
 	},
 	isUsable() {
@@ -61,7 +64,7 @@ export function useVCS() {
 	tag(t) {
 	  hgTag(t);
 	},
-	commit(message) {
+	commit(message = commitMessage) {
 	  hgBump(message);
 	},
 	isUsable() {
