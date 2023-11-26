@@ -23,27 +23,27 @@ import { ok, notOk } from "./result.js";
  * @returns {boolean}
  */
 export function isValid(object) {
-	if (
-		!Object.prototype.hasOwnProperty.call(object, "currentVersion") ||
-		!(typeof object.currentVersion == "string") ||
-		!Object.prototype.hasOwnProperty.call(object, "rules") ||
-		!Array.isArray(object.rules)
-	) {
-		return false;
-	}
+  if (
+    !Object.prototype.hasOwnProperty.call(object, "currentVersion") ||
+      !(typeof object.currentVersion == "string") ||
+      !Object.prototype.hasOwnProperty.call(object, "rules") ||
+      !Array.isArray(object.rules)
+  ) {
+    return false;
+  }
 
-	for (const rule of object.rules) {
-		if (
-			!Object.prototype.hasOwnProperty.call(rule, "file") ||
-			!(typeof rule.file == "string") ||
-			!Object.prototype.hasOwnProperty.call(rule, "version") ||
-			!(typeof rule.version == "string")
-		) {
-			return false;
-		}
-	}
+  for (const rule of object.rules) {
+    if (
+      !Object.prototype.hasOwnProperty.call(rule, "file") ||
+	!(typeof rule.file == "string") ||
+	!Object.prototype.hasOwnProperty.call(rule, "version") ||
+	!(typeof rule.version == "string")
+    ) {
+      return false;
+    }
+  }
 
-	return true;
+  return true;
 }
 
 /**
@@ -53,7 +53,7 @@ export function isValid(object) {
  * @returns {string}
  */
 function generateMessage(message) {
-	return "[Config loading]: " + message;
+  return "[Config loading]: " + message;
 }
 
 /**
@@ -68,26 +68,26 @@ function generateMessage(message) {
  *
  */
 export function loadConfig(fname) {
-	let data;
+  let data;
 
-	try {
-		data = readFileSync(fname, "utf8");
-	} catch {
-		return notOk(generateMessage(
-			"Can't load a config file.\nMake sure that " +  fname + " exists."));
-	}
+  try {
+    data = readFileSync(fname, "utf8");
+  } catch {
+    return notOk(generateMessage(
+      "Can't load a config file.\nMake sure that " +  fname + " exists."));
+  }
 
-	let config;
+  let config;
 
-	try {
-		config = JSON.parse(data);
-	} catch (/** @type {any}*/ error) {
-		return notOk(generateMessage(error.message));
-	}
+  try {
+    config = JSON.parse(data);
+  } catch (/** @type {any}*/ error) {
+    return notOk(generateMessage(error.message));
+  }
 
-	if (!isValid(config)) {
-		return notOk(generateMessage("Config is not valid"));
-	}
+  if (!isValid(config)) {
+    return notOk(generateMessage("Config is not valid"));
+  }
 
-	return ok(config);
+  return ok(config);
 }

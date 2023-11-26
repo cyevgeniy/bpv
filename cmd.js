@@ -8,9 +8,9 @@ import { spawnSync } from "node:child_process";
  * @returns {import("node:child_process").SpawnSyncReturns<Buffer | string | undefined>}
  */
 export function runCommand(command, arguments_, options) {
-	const result = spawnSync(command, arguments_, options);
+  const result = spawnSync(command, arguments_, options);
 
-	return result;
+  return result;
 }
 
 /**
@@ -22,7 +22,7 @@ export function runCommand(command, arguments_, options) {
  * @returns {string | undefined}
  */
 export function runAndGetOutput(command, arguments_) {
-	const result = runCommand(command, arguments_, { encoding: "utf8" });
+  const result = runCommand(command, arguments_, { encoding: "utf8" });
 
-	return result.status == 0 ? String(result.stdout) : undefined;
+  return result.status == 0 ? String(result.stdout) : undefined;
 }

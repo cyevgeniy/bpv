@@ -1,45 +1,45 @@
 {
-    "name": "bpv",
-    "version": "1.0.0",
-    "main": "./dist/bundle.js",
-    "scripts": {
-        "build-bundle": "rimraf dist && rollup --config rollup.config.js",
-        "test": "npx vitest",
-        "lint": "npx eslint *.js",
-        "typecheck": "npx tsc --noEmit"
-    },
-    "bin": {
-        "bpv": "./bin/cli.js"
-    },
-    "files": [
-        "bin",
-        "dist"
-    ],
-    "keywords": [
-        "bpv",
-        "versioning",
-        "version-increment",
-        "version-bump"
-    ],
-    "type": "module",
-    "author": "Evgeny Chaban",
-    "license": "ISC",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/cyevgeniy/bp.git"
-    },
-    "devDependencies": {
-        "@rollup/plugin-commonjs": "^25.0.0",
-        "@rollup/plugin-node-resolve": "^15.1.0",
-        "@typescript-eslint/eslint-plugin": "^5.59.6",
-        "@typescript-eslint/parser": "^5.59.6",
-        "eslint": "^8.41.0",
-        "eslint-plugin-unicorn": "^47.0.0",
-        "prettier": "2.8.8",
-        "vitest": "^0.31.1"
-    },
-    "dependencies": {
-        "cac": "^6.7.14",
-        "picocolors": "^1.0.0"
-    }
+  "name": "bpv",
+  "version": "1.0.0",
+  "main": "./dist/bundle.js",
+  "scripts": {
+    "build-bundle": "rimraf dist && rollup --config rollup.config.js",
+    "test": "npx vitest",
+    "lint": "npx eslint *.js",
+    "typecheck": "npx tsc --noEmit"
+  },
+  "bin": {
+    "bpv": "./bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "keywords": [
+    "bpv",
+    "versioning",
+    "version-increment",
+    "version-bump"
+  ],
+  "type": "module",
+  "author": "Evgeny Chaban",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyevgeniy/bp.git"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.6",
+    "@typescript-eslint/parser": "^5.59.6",
+    "eslint": "^8.41.0",
+    "eslint-plugin-unicorn": "^47.0.0",
+    "prettier": "2.8.8",
+    "vitest": "^0.31.1"
+  },
+  "dependencies": {
+    "cac": "^6.7.14",
+    "picocolors": "^1.0.0"
+  }
 }

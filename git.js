@@ -10,31 +10,31 @@ import {runCommand, runAndGetOutput} from "./cmd.js"
  * @returns boolean
  */
 export function isDirty() {
-	const statusOutput = runAndGetOutput("git", ["status", "-s"]);
+  const statusOutput = runAndGetOutput("git", ["status", "-s"]);
 
-	// Return true on any error
-	if (statusOutput === undefined) {
-		return true;
-	}
+  // Return true on any error
+  if (statusOutput === undefined) {
+    return true;
+  }
 
-	// TODO: Fix that on Windows - probably it will be "\r\n"
-	const files = statusOutput.split("\n");
+  // TODO: Fix that on Windows - probably it will be "\r\n"
+  const files = statusOutput.split("\n");
 
-	for (const line of files) {
-		const trimmedLine = line.trim();
-		if (trimmedLine[0] === "M") {
-			return true;
-		}
-	}
+  for (const line of files) {
+    const trimmedLine = line.trim();
+    if (trimmedLine[0] === "M") {
+      return true;
+    }
+  }
 
-	return false;
+  return false;
 }
 
 /**
  * Adds all indexed files to the next commit
  */
 function add() {
-	return runCommand("git", ["add", "-u"]);
+  return runCommand("git", ["add", "-u"]);
 }
 
 /**
@@ -43,7 +43,7 @@ function add() {
  * @param {string} message - Commit message
  */
 function commit(message) {
-	return runCommand("git", ["commit", "-m", message]);
+  return runCommand("git", ["commit", "-m", message]);
 }
 
 /**
@@ -52,13 +52,13 @@ function commit(message) {
  * @param {string} [message] - Commit message.
  */
 export function bumpAllFiles(message = "Bump version") {
-	const addResult = add();
+  const addResult = add();
 
-	if (addResult.status != 0) {
-		return;
-	}
+  if (addResult.status != 0) {
+    return;
+  }
 
-	commit(message);
+  commit(message);
 }
 
 /**
@@ -67,16 +67,16 @@ export function bumpAllFiles(message = "Bump version") {
  * @param {string} tagName Tag
  */
 export function tag(tagName) {
-	if (!tagName) {
-		return;
-	}
-	runCommand("git", [
-		"tag",
-		"--annotate",
-		tagName,
-		"-m",
-		tagName,
-	]);
+  if (!tagName) {
+    return;
+  }
+  runCommand("git", [
+    "tag",
+    "--annotate",
+    tagName,
+    "-m",
+    tagName,
+  ]);
 }
 
 /**
@@ -85,7 +85,7 @@ export function tag(tagName) {
  * @returns {boolean}
  */
 export function isUsable() {
-	const result = runCommand("git", ["rev-parse"]);
+  const result = runCommand("git", ["rev-parse"]);
 
-	return result.status == 0;
+  return result.status == 0;
 }

@@ -15,12 +15,12 @@ import { stat, readFile, writeFile } from "node:fs/promises";
  * @property {string} before A line before change
  * @property {string} after A line after change
  * @property {number} line Line number
- */ 
+ */
 
 /**
  * Returns result of replacement in a file
  *
- * @param {Array<string>} lines - File's lines 
+ * @param {Array<string>} lines - File's lines
  * @param {ReplaceOption} replaceOption - Replace option
  * @returns {Promise<Array<LineDiff>>} List of changes in a file
  */
@@ -31,7 +31,7 @@ export async function getFileReplace(lines, replaceOption) {
   let result = []
 
   for (const [lineNumber, line] of lines.entries()) {
-		const match = replaceOption.from.test(line);
+    const match = replaceOption.from.test(line);
 
     if (match) {
       result.push({
@@ -49,7 +49,7 @@ export async function getFileReplace(lines, replaceOption) {
 /**
  * @typedef {Object} ReplaceResult
  * @property {string} file - File name
- * @property {Array<LineDiff>} diffs - Replace diff 
+ * @property {Array<LineDiff>} diffs - Replace diff
  */
 
 /**
@@ -59,16 +59,16 @@ export async function getFileReplace(lines, replaceOption) {
  * @returns {Promise<boolean>}
  */
 async function isFileExists(file) {
-	let result = true;
-	try {
-		const statResult = await stat(file);
+  let result = true;
+  try {
+    const statResult = await stat(file);
 
-		result = statResult.isFile();
-	} catch {
-		result = false;
-	}
+    result = statResult.isFile();
+  } catch {
+    result = false;
+  }
 
-	return result;
+  return result;
 }
 
 
@@ -85,26 +85,26 @@ async function isFileExists(file) {
  * @return {Promise<Result>}
  */
 export async function replaceInFile(replaceOption, dryRun=false) {
-	// Don't use `!replaceOption.to` form, because empty string
-	// is a valid value for replacement
-	if (!replaceOption.file || !replaceOption.from || replaceOption.to == undefined) {
-		return notOk("Invalid replace option")
-	}
+  // Don't use `!replaceOption.to` form, because empty string
+  // is a valid value for replacement
+  if (!replaceOption.file || !replaceOption.from || replaceOption.to == undefined) {
+    return notOk("Invalid replace option")
+  }
 
 
-	// Check if file exists
-	if (!(await isFileExists(replaceOption.file))) {
-		return notOk("The file doesn't exist")
-	}
+  // Check if file exists
+  if (!(await isFileExists(replaceOption.file))) {
+    return notOk("The file doesn't exist")
+  }
 
 
-	let fileContent;
+  let fileContent;
 
-	try {
-		fileContent = await readFile(replaceOption.file, { encoding: "utf8" });
-	} catch {
-		return notOk("Can't read file's content");
-	}
+  try {
+    fileContent = await readFile(replaceOption.file, { encoding: "utf8" });
+  } catch {
+    return notOk("Can't read file's content");
+  }
 
   const lines = fileContent.split(/\r?\n/);
   const usesR = /\r\n/.test(fileContent);
@@ -112,17 +112,17 @@ export async function replaceInFile(replaceOption, dryRun=false) {
   const lineDiffs = await getFileReplace(lines, replaceOption)
 
 
-	if (!dryRun && lineDiffs.length > 0) {
-		for (const diff of lineDiffs) {
-			lines[diff.line - 1] = diff.after
-		}
-    
-		try {
-			await writeFile(replaceOption.file, lines.join(usesR ? "\r\n" : "\n"));
-		} catch {
-			return notOk("Can't write to the file");
-		}
-	}
+  if (!dryRun && lineDiffs.length > 0) {
+    for (const diff of lineDiffs) {
+      lines[diff.line - 1] = diff.after
+    }
 
-	return ok({file: replaceOption.file, diffs: lineDiffs});
+    try {
+      await writeFile(replaceOption.file, lines.join(usesR ? "\r\n" : "\n"));
+    } catch {
+      return notOk("Can't write to the file");
+    }
+  }
+
+  return ok({file: replaceOption.file, diffs: lineDiffs});
 }

@@ -10,24 +10,24 @@ import {runCommand, runAndGetOutput} from "./cmd.js"
  * @returns boolean
  */
 export function isDirty() {
-	const statusOutput = runAndGetOutput("hg", ["status", "-umard"]);
+  const statusOutput = runAndGetOutput("hg", ["status", "-umard"]);
 
-	// Return true on any error
-	if (statusOutput === undefined) {
-		return true;
-	}
+  // Return true on any error
+  if (statusOutput === undefined) {
+    return true;
+  }
 
-	// TODO: Fix that on Windows - probably it will be "\r\n"
-	const files = statusOutput.split("\n");
+  // TODO: Fix that on Windows - probably it will be "\r\n"
+  const files = statusOutput.split("\n");
 
-	for (const line of files) {
-		const trimmedLine = line.trim();
-		if (trimmedLine[0] === "M") {
-			return true;
-		}
-	}
+  for (const line of files) {
+    const trimmedLine = line.trim();
+    if (trimmedLine[0] === "M") {
+      return true;
+    }
+  }
 
-	return false;
+  return false;
 }
 /**
  * Commits changes in all modified files.
@@ -35,7 +35,7 @@ export function isDirty() {
  * @param {string} [message] - Commit message.
  */
 export function bumpAllFiles(message = "Bump version") {
-	runCommand("hg", ["ci", "-m", message]);
+  runCommand("hg", ["ci", "-m", message]);
 }
 
 /**
@@ -44,15 +44,15 @@ export function bumpAllFiles(message = "Bump version") {
  * @param {string} tagName Tag
  */
 export function tag(tagName) {
-	if (!tagName) {
-		return;
-	}
-	runCommand("hg", [
-		"tag",
-		tagName,
-		"--message",
-		tagName
-	]);
+  if (!tagName) {
+    return;
+  }
+  runCommand("hg", [
+    "tag",
+    tagName,
+    "--message",
+    tagName
+  ]);
 }
 
 /**
@@ -61,7 +61,7 @@ export function tag(tagName) {
  * @returns {boolean}
  */
 export function isUsable() {
-	const result = runCommand("hg", ["root"]);
+  const result = runCommand("hg", ["root"]);
 
-	return result.status == 0;
+  return result.status == 0;
 }

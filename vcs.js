@@ -1,17 +1,17 @@
 //@ts-check
 
 import {
-	bumpAllFiles as gitBump,
-	tag as gitTag,
-	isUsable as gitIsUsable,
-	isDirty as gitIsDirty,
+  bumpAllFiles as gitBump,
+  tag as gitTag,
+  isUsable as gitIsUsable,
+  isDirty as gitIsDirty,
 } from "./git.js";
 
 import {
-	bumpAllFiles as hgBump,
-	tag as hgTag,
-	isUsable as hgIsUsable,
-	isDirty as hgIsDirty,
+  bumpAllFiles as hgBump,
+  tag as hgTag,
+  isUsable as hgIsUsable,
+  isDirty as hgIsDirty,
 } from "./hg.js";
 
 /**
@@ -34,42 +34,42 @@ import {
  * @returns {Vcs | undefined}
  */
 export function useVCS() {
-	//prettier-ignore
-	const vcsName = gitIsUsable() ? "git" : (hgIsUsable() ? "hg" : "");
+  //prettier-ignore
+  const vcsName = gitIsUsable() ? "git" : (hgIsUsable() ? "hg" : "");
 
-	return vcsName === ""
-		? undefined
-		: {
-				/** @type {Vcs} */
-				git: {
-					tag(t) {
-						gitTag(t);
-					},
-				  commit(message) {
-						gitBump(message);
-					},
-					isUsable() {
-						return gitIsUsable();
-					},
-					isDirty() {
-						return gitIsDirty();
-					},
-				},
+  return vcsName === ""
+    ? undefined
+    : {
+      /** @type {Vcs} */
+      git: {
+	tag(t) {
+	  gitTag(t);
+	},
+	commit(message) {
+	  gitBump(message);
+	},
+	isUsable() {
+	  return gitIsUsable();
+	},
+	isDirty() {
+	  return gitIsDirty();
+	},
+      },
 
-				/** @type {Vcs} */
-				hg: {
-					tag(t) {
-						hgTag(t);
-					},
-				  commit(message) {
-						hgBump(message);
-					},
-					isUsable() {
-						return hgIsUsable();
-					},
-					isDirty() {
-						return hgIsDirty();
-					},
-				},
-		  }[vcsName];
+      /** @type {Vcs} */
+      hg: {
+	tag(t) {
+	  hgTag(t);
+	},
+	commit(message) {
+	  hgBump(message);
+	},
+	isUsable() {
+	  return hgIsUsable();
+	},
+	isDirty() {
+	  return hgIsDirty();
+	},
+      },
+    }[vcsName];
 }

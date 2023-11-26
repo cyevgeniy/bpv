@@ -14,11 +14,11 @@
  * @returns {Result}
  */
 export function notOk(message) {
-    return {
-        ok: false,
-        value: undefined,
-        message: message ?? "",
-    };
+  return {
+    ok: false,
+    value: undefined,
+    message: message ?? "",
+  };
 }
 
 /**
@@ -28,9 +28,9 @@ export function notOk(message) {
  * @param {string} [message]
  */
 export function ok(value, message = "") {
-    return {
-        ok: true,
-        value: value,
-        message: message ?? "",
-    };
+  return {
+    ok: true,
+    value: value,
+    message: message ?? "",
+  };
 }
