@@ -20,11 +20,12 @@ npm i -g bpv
 ## Configuration
 
 Bpv expects a `bpv.conf.json` file, which
-looks like this: 
+looks like this:
 
 ```
 {
 	"currentVersion": "20.0.3",
+        "commitMessage": "chore: bump version",
 	"rules": [
 		{"file": "bpv.conf.json", "version": "\"currentVersion\": \"{{version}}\""},
 		{"file": "manifest.xml", "version": "\"version\": \"{{version}}\""}
@@ -35,8 +36,9 @@ looks like this:
 - `rules` is an array of objects with information about files that contain version
   strings and how version strings look. `{{version}}` in the "version" property
   is an actual semver version. Use `\"` to escape quotes.
+- `commitMessage`(**optional**) is a commit message that will be used if  `--commit` flag is provided
 
-### Example 
+### Example
 
 If we have a `build.gradle` file:
 
@@ -55,8 +57,8 @@ If we have a `build.gradle` file:
       }
     }
     ...
-    
-``` 
+
+```
 
 And we want to increment version only in this file, our
 `bpv.conf.json` should look so:
@@ -73,6 +75,8 @@ And we want to increment version only in this file, our
 ```
 
 Note that bpv.conf.json is also presented in the config file.
+
+
 
 ## Usage
 
@@ -94,9 +98,9 @@ There're also a few optional flags:
 - `--tag`, `-t` - create a tag after version increment with new version as
   annotate message
 - `--verbose`, `-v` - print the list of files and the result of version replacement
-  in them. 
+  in them.
 
-Bump version and create a "Bump version" commit: 
+Bump version and create a "Bump version" commit:
 
 ```
 npx bpv bump --patch --commit
@@ -122,7 +126,7 @@ It prints a new version and the list of files that will be changed:
 npx bpv bump --major --dry
 ```
 
-Output: 
+Output:
 
 ```
 DRY RUN MODE IS ON. NO FILES WILL BE ACTUALLY MODIFIED
