@@ -26,7 +26,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cyevgeniy/bp.git"
+    "url": "https://git.sr.ht/~ychbn/bp"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.0",
