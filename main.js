@@ -8,7 +8,7 @@ import { notOk } from "./result.js";
 import cac from "cac";
 import pc from "picocolors";
 
-const CONF_FILE = "bpv.conf.json";
+const CONF_FILES = [".bpv.json", "bpv.conf.json"];
 
 const vcs = useVCS();
 
@@ -182,7 +182,7 @@ function printdryNotice(newVersion) {
  * @param {any} options command-line options
  */
 async function runBump(options) {
-  const configResult = loadConfig(CONF_FILE);
+  const configResult = loadConfig(CONF_FILES);
 
   if (!configResult.ok) {
     printErrorAndExit(configResult.message);
@@ -267,7 +267,7 @@ async function runSet(version, options) {
    */
   const parsedVersion = parseResult.value;
 
-  const configResult = loadConfig(CONF_FILE);
+  const configResult = loadConfig(CONF_FILES);
 
   if (!configResult.ok) {
     printErrorAndExit(configResult.message);

@@ -1,7 +1,11 @@
 //@ts-check
 
-import { readFileSync } from "node:fs";
+import { readFileSync, accessSync, constants } from "node:fs";
 import { ok, notOk } from "./result.js";
+
+const {
+  R_OK
+} = constants
 
 /**
  * @typedef Rule
@@ -56,6 +60,28 @@ function generateMessage(message) {
   return "[Config loading]: " + message;
 }
 
+
+/**
+ * Returns the first available file from the list.
+ * If there're no files available, throws an error.
+ * 
+ * @param {string[]} files An array of filenames 
+ * @returns {string} The first available filename
+ */
+function getFirstFile(files) {
+  for (let file of files) {
+    try {
+      accessSync(file, R_OK)
+      return file
+    }
+    catch {
+      //  
+    }
+  }
+
+  throw new Error('No config files detected')
+}
+
 /**
  * @typedef {import('./result.js').Result} Result
  */
@@ -63,11 +89,22 @@ function generateMessage(message) {
 /**
  * Loads specified config file.
  *
- * @param {string} fname config file name
+ * @param {string[]} fnames config file name
  * @returns {Result} result with parsed config
  *
  */
-export function loadConfig(fname) {
+export function loadConfig(fnames) {
+  let fname;
+
+  try {
+    fname = getFirstFile(fnames);
+  }
+  catch (/** @type {unknown} **/error) {
+    return error instanceof Error
+      ? notOk(generateMessage(error.message))
+      : notOk(generateMessage('Panic! We are unable to find the config file.'))
+  }
+
   let data;
 
   try {
