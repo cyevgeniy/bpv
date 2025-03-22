@@ -19,7 +19,7 @@ npm i -g bpv
 
 ## Configuration
 
-Bpv expects a `bpv.conf.json` file, which
+Bpv expects a `.bpv.json` or `bpv.conf.json` file, which
 looks like this:
 
 ```
