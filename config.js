@@ -1,6 +1,6 @@
 //@ts-check
 
-import { readFileSync, accessSync, constants } from "node:fs";
+import { readFileSync,  accessSync, constants } from "node:fs";
 import { ok, notOk } from "./result.js";
 
 const {
@@ -75,7 +75,7 @@ function getFirstFile(files) {
       return file
     }
     catch {
-      //  
+      //
     }
   }
 
@@ -114,6 +114,7 @@ export function loadConfig(fnames) {
       "Can't load a config file.\nMake sure that " +  fname + " exists."));
   }
 
+  /** @type { Config }*/
   let config;
 
   try {
@@ -124,6 +125,14 @@ export function loadConfig(fnames) {
 
   if (!isValid(config)) {
     return notOk(generateMessage("Config is not valid"));
+  }
+
+  // Always include config file into the rules
+  if (config.rules.findIndex((rule) => rule.file === fname) === -1) {
+    config.rules.push({
+      file: fname,
+      version: '"currentVersion": "{{version}}"'
+    })
   }
 
   return ok(config);
